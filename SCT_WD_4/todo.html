@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do Web App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1c1c28;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .todo-container {
+      background: #2c2c3a;
+      padding: 20px;
+      border-radius: 10px;
+      width: 350px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+    }
+
+    button {
+      cursor: pointer;
+      background: #3498db;
+      color: #fff;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #3b3b4d;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .task-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .completed {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+
+    .actions button {
+      margin-left: 5px;
+      font-size: 0.9rem;
+      padding: 5px 10px;
+    }
+
+    small {
+      color: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝 To-Do List</h1>
+  <div class="todo-container">
+    <div class="input-group">
+      <input type="text" id="taskInput" placeholder="Enter task">
+      <input type="datetime-local" id="taskDateTime">
+      <button onclick="addTask()">Add Task</button>
+    </div>
+    <ul id="taskList"></ul>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const taskDateTime = document.getElementById("taskDateTime");
+    const taskList = document.getElementById("taskList");
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+      const dateTime = taskDateTime.value;
+      if (taskText === "") return;
+
+      const li = document.createElement("li");
+      
+      const mainDiv = document.createElement("div");
+      mainDiv.className = "task-main";
+
+      const span = document.createElement("span");
+      span.textContent = taskText;
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      // Complete button
+      const completeBtn = document.createElement("button");
+      completeBtn.textContent = "✔";
+      completeBtn.onclick = () => {
+        span.classList.toggle("completed");
+      };
+
+      // Edit button
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "✎";
+      editBtn.onclick = () => {
+        const newTask = prompt("Edit task:", span.textContent);
+        if (newTask) span.textContent = newTask;
+      };
+
+      // Delete button
+      const deleteBtn = document.createElement("button");
+      deleteBtn.textContent = "🗑";
+      deleteBtn.onclick = () => {
+        li.remove();
+      };
+
+      actions.appendChild(completeBtn);
+      actions.appendChild(editBtn);
+      actions.appendChild(deleteBtn);
+
+      mainDiv.appendChild(span);
+      mainDiv.appendChild(actions);
+      li.appendChild(mainDiv);
+
+      // Add date/time info
+      if (dateTime) {
+        const small = document.createElement("small");
+        small.textContent = "⏰ " + new Date(dateTime).toLocaleString();
+        li.appendChild(small);
+      }
+
+      taskList.appendChild(li);
+
+      taskInput.value = "";
+      taskDateTime.value = "";
+    }
+  </script>
+</body>
+</html>
